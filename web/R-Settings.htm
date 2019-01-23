@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="custom.css" />
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-migrate-3.0.1.js"></script>
+	
+	<!-- https://github.com/gitbrent/bootstrap4-toggle -->
+	<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
+	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+	
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+	
+</head>
+
+<body>
+<div data-role="page" id="settings">
+
+  <script type="text/javascript">
+
+    $('#settings').on('pagebeforeshow', function () {
+      $.ajax("json/settings", {async: false, dataType: "json", success: function (data) {
+          $('#settings div[data-role="fieldcontain"]').css('display','none');
+          NV(data, 'ip');
+          NV(data, 'netmask');
+          NV(data, 'gateway');
+          NV(data, 'wuip');
+          NV(data, 'apikey');
+          NV(data, 'apiid');
+          NV(data, 'apisecret');
+          NV(data, 'wutype');
+          NV(data, 'zip');
+          NV(data, 'pws');
+          NV(data, 'loc');
+          NV(data, 'NTPip');
+          NV(data, 'NTPoffset');
+          NV(data, 'ot');
+          NV(data, 'webport');
+          NV(data, 'sadj');
+        }});
+    });
+
+    function NV(data, e) {
+      if (e in data) {
+        $('#settings #'+e+'div').css('display','block');
+        if ((e=='ot') || (e=='wutype')) {
+          $('#'+e+'div input[type="radio"]').prop("checked",false).checkboxradio("refresh");
+          $("#settings #"+e+data[e]).prop("checked", true).checkboxradio("refresh");
+        } else if (e=='sadj')
+          $('#settings #'+e).val(data[e]).slider('refresh');
+        else
+          $('#settings #'+e).val(data[e]);
+      }
+    }
+
+    function settingsSubmitForm() {
+      $.ajax({
+        data: $('#setForm').serialize(),
+        type: 'get',
+        url: 'bin/settings',
+        success: function (d) {
+          window.history.back();
+        },
+        error: function (xhr, st, e) {
+          alert(st);
+          window.history.back();
+        }
+      });
+    }
+  </script>
+  
+		<nav class="navbar navbar-light" style="background-color: #e9e9e9;">
+			<button type="button" onclick="window.location.href='./R-index.htm';" class="btn btn-secondary">Cancel</button>
+			<a class="navbar-brand navbar-text" href="R-index.htm">Settings</a>
+			<button type="button" onclick="javascript:zoneSubmitForm();" class="btn btn-secondary">Ok</button>
+		</nav>
+		<!-- /header -->
+	  
+	<div class="container">
+			<div class="row">
+				<div class="col">
+					<form id="setForm" action="#">
+					
+					<div class="form-group input-group">
+						<div id="ipdiv" data-role="fieldcontain">
+							<span class="input-group-addon">IP:</span>
+							<input class="form-control" type="text" name="ip" id="ip" value="" maxlength=15 />
+							<small id="emailHelp" class="form-text text-muted">IP Address</small>
+						</div>
+					</div>
+					<div class="form-group input-group">
+						<div id="netmaskdiv" data-role="fieldcontain">
+							<label for="netmask">Netmask:</label>
+							<input class="form-control" type="text" name="netmask" id="netmask" value="" maxlength=15 />
+						</div>
+					</div>
+					<div class="form-group input-group">	  
+						<div id="gatewaydiv" data-role="fieldcontain">
+							<label for="gateway">Gateway:</label>
+							<input class="form-control" type="text" name="gateway" id="gateway" value="" maxlength=15 />
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row mt-4">
+				<div class="col">			
+					
+					<div class="panel panel-success card">
+						<div class="panel-heading card-header">
+						  <h3 class="panel-title card-title">Weather Station Settings</h3>
+						</div>
+						<div class="panel-body card-body">
+							<div class="input-group">
+								<span class="input-group-addon">API Key: </span>
+								<input type="text" class="form-control" name="apikey" id="apikey" value="" maxlength=16 />
+							</div>	
+
+							<div class="input-group">
+								<div id="apiiddiv" data-role="fieldcontain">
+									<span class="input-group-addon">API Id: </span>
+									<input type="text" class="form-control" name="apiid" id="apiid" value="" maxlength=32 />
+								</div>
+							</div>	
+
+							<div class="input-group">
+								<div id="apisecretdiv" data-role="fieldcontain">
+									<span class="input-group-addon">API Secret: </span>
+									<input type="text" class="form-control" name="apisecret" id="apisecret" value="" maxlength=64 />
+								</div>
+							</div>	
+							
+							<div class="input-group">
+								<div id="wutypediv" data-role="fieldcontain">
+									<fieldset data-role="controlgroup" data-type="horizontal">
+									  <legend>Location Type:</legend>
+									  <input class="form-control" type="radio" name="wutype" id="wutypezip" value="zip"/>
+									  <label for="wutypezip">Zip</label>
+									  <input class="form-control" type="radio" name="wutype" id="wutypepws" value="pws" />
+									  <label for="wutypepws">PWS</label>
+									</fieldset>
+								</div>
+							</div>
+
+							<div class="input-group">
+								<div id="zipdiv" data-role="fieldcontain">
+									<span class="input-group-addon">Zip Code: </span>
+									<input type="number" class="form-control" name="zip" id="zip" value="" min="0" max="99999" />
+								</div>
+							</div>
+							
+							<div class="input-group">
+								<div id="pwsdiv" data-role="fieldcontain">
+									<span class="input-group-addon">PWS ID: </span>
+									<input type="text" class="form-control" name="pws" id="pws" value="" maxlength=11 />
+								</div>
+							</div>
+							
+							<div class="input-group">
+								<div id="locdiv" data-role="fieldcontain">
+									<span class="input-group-addon">Location: </span>
+									<input type="text" class="form-control" name="loc" id="loc" value="" maxlength=50 />
+								</div>	
+							</div>
+						
+						</div>
+					</div>					
+				</div>
+			</div>
+			
+			<div class="row mt-4">
+				<div class="col">
+				
+					<div class="panel panel-success card">
+						<div class="panel-heading card-header">
+						  <h3 class="panel-title card-title">Time Zone & Port Settings</h3>
+						</div>
+						<div class="panel-body card-body">
+							<div class="input-group">
+								<div id="NTPipdiv" data-role="fieldcontain">
+									<span class="input-group-addon">NTP IP: </span>
+									<input type="text" class="form-control" name="NTPip" id="NTPip" value="" maxlength=15 />
+								</div>
+							</div>
+								
+							<div class="input-group">	  
+								<div id="NTPoffsetdiv" data-role="fieldcontain">
+									<span class="input-group-addon">Timezone Offset: </span>
+									<input type="number" class="form-control" name="NTPoffset" id="NTPoffset" value="" min="-12" max="14"/>
+								</div>
+							</div>
+							
+							<div class="input-group">	  
+								<div id="webportdiv" data-role="fieldcontain">
+									<span class="input-group-addon">Web Port: </span>
+									<input type="number" class="form-control" name="webport" id="webport" value="" min="0" max="32767"/>
+								</div>
+							</div>
+						</div>
+					</div>	
+
+				</div>
+			</div>		  
+			<br>
+			<div class="row mt-4">
+				<div class="col">
+
+					<div class="panel panel-success card">
+						<div class="panel-heading card-header">
+						  <h3 class="panel-title card-title">Output Device and Temporary Seasonal Adjust</h3>
+						</div>
+						<div class="panel-body card-body">
+							
+							<div class="input-group">
+								<div id="sadjdiv" data-role="fieldcontain">
+									<span class="input-group-addon">Seasonal Adjust % </span>
+									<input type="range" class="form-control" name="sadj" id="sadj" value="" min="0" max="200" />
+								</div>
+							</div>
+							
+							<div class="panel-heading">Output:</div>
+							
+							<div class="input-group">
+								<div id="otdiv" data-role="fieldcontain">
+									<fieldset data-role="controlgroup" data-type="vertical" data-mini="true">										 
+											
+											<div class="input-group">
+												<span class="input-group-addon">
+													<input type="radio" name="ot" id="ot0" value="0">
+												</span>
+												<label for="ot4">None</label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon">
+													<input type="radio" name="ot" id="ot1" value="1" />
+												</span>
+												<label for="ot1">Direct Positive</label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon">
+													<input type="radio" name="ot" id="ot2" value="2" />
+												</span>
+												<label for="ot2">Direct Negative</label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon">
+													<input type="radio" name="ot" id="ot3" value="3" />
+												</span>
+												<label for="ot3">OpenSprinkler</label>
+											</div>
+											<div class="input-group">
+												<span class="input-group-addon ">
+													<input type="radio" name="ot" id="ot4" value="4" />
+												</span>
+												<label for="ot4">MQTT Device</label>
+											</div>
+											
+									</fieldset>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</form>
+					<p>Note: Settings do not save until you click "OK" at the top.</p>
+				</div>
+			</div>
+			
+		</div> <!-- /content -->
+	</div>
+	<style>
+		#footer {
+		  bottom: 0;
+		  width: 100%;
+		  /* Set the fixed height of the footer here */
+		  height: 60px;
+		  background-color: #e9e9e9;
+		}
+	</style>	
+	
+		<footer class="footer">
+			<div id="footer">
+			  <div class="container">
+				<div data-role="footer" class="footer-docs" data-theme="a">
+					<p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>
+				</div>
+			  </div>
+			</div>
+		</footer>
+		
+		</div> <!-- /page -->
+</body>
+
+</html>

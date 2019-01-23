@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+  
+  <head>
+    <title>Automatic Sprinkler Controller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- <link rel="stylesheet" href="custom.css" /> -->
+
+	<script src="https://cdn.trackjs.com/agent/v3/latest/t.js" cross-origin="anonymous"></script>
+	<script>
+	  window.TrackJS && TrackJS.install({ 
+		token: "77c60ae605bd405293438163ca05213a"
+		// for more configuration options, see https://docs.trackjs.com
+	  });
+	</script>
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-migrate-3.0.1.js"></script>
+	
+	<!-- https://github.com/gitbrent/bootstrap4-toggle -->
+	<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
+	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+	
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+  </head>
+  
+  <body >
+    <!-- Home -->
+    <div data-role="page" id="page1">
+      <script language="javascript"  type="text/javascript">
+        var getUpcomingSched = function() {
+          $.ajax("json/schedules", {async: true, dataType: "json", success: function (data) {
+            var output = '';
+            var found = false;
+            for (var i = 0; i < data.Table.length; i += 1) {
+              if (data.Table[i].e == 'on' && (data.Table[i].td || data.Table[i].tm)) {
+                found = true;
+                output += '<li><a href="ShSched.htm?id=' + data.Table[i].id + '" data-transition="slide">';
+                output += data.Table[i].name;
+                output += ': ';
+                output += data.Table[i].next;
+                output += '</a></li>';
+              }
+            }
+            if (found) {
+              $('#upcoming').show().find('ul').empty().append(output);
+            } else {
+              $('#upcoming').hide();
+            }
+          }});
+        };
+        $(document).on('pageinit', function () {
+          $('#systemz').on('change', function (e) {
+            $.get("bin/run", {
+              system: this.value
+            }).then(getUpcomingSched);
+          });
+        });
+        var timeout = 0;
+        function pad(n, width, z) {
+          z = z || '0';
+          n = n + '';
+          return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+        }
+        $('#page1').on('pagebeforeshow', function () {
+          $.ajax("json/state", {async: false, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
+            $('#zones_lv').find('span').text(data.zones);
+            $('#schedules_lv').find('span').text(data.schedules);
+            var dt = new Date(data.timenow*1000);
+            $('#version').text("V"+data.version);
+            $('#timediv').empty().append('' + pad(dt.getUTCHours(),2) + ':' + pad(dt.getUTCMinutes(),2) + ':' + pad(dt.getUTCSeconds(),2) + ' ' + pad(dt.getUTCFullYear(),4) + '/' + pad(dt.getUTCMonth()+1,2) + '/' + pad(dt.getUTCDate(),2) );
+            checkAnim(data);
+            getUpcomingSched();
+          }});
+        });
+
+        function checkAnim(data) {
+            $('#systemz').val(data.run).slider('refresh');
+            if (data.offtime != null) {
+              timeout = (new Date().getTime()) / 1000 + parseInt(data.offtime, 10);
+              $('#szone').text(data.onzone);
+              $('#sgif').css('display', 'block');
+              if (parseInt(data.offtime, 10) == 99999) {
+                $('#spantime').text("--:--");
+              } else {
+                window.setTimeout(function () {updateAnim();}, 1);
+            }
+			} else {
+              $('#sgif').css('display', 'none');
+			}
+        }
+        function updateAnim() {
+          if ($.mobile.activePage.attr("id") != "page1") {
+			  return;
+		  }
+          var remaining = Math.floor(timeout - (new Date().getTime()) / 1000);
+          if (remaining >= 0) {
+            $('#spantime').text(
+              Math.floor(remaining / 60).toString() + ":" + 
+              ("00" + (remaining % 60).toString()).substr(-2));
+              window.setTimeout(function () {updateAnim();}, 1000);
+          } else {
+            $.getJSON("json/state", checkAnim);
+          }
+        }
+        function showWeather() {
+          $.ajax("json/wcheck", {async: false, dataType: "json", success: function (data) {
+            if (data.noprovider == "true") {
+              $('#wuText').empty().append("No Weather Provider defined in settings.h");
+            } else if (data.keynotfound == "true") {
+              $('#wuText').empty().append("Weather Provider API Key is invalid!");
+            } else if (data.valid == "false") {
+              $('#wuText').empty().append("Invalid Response from Weather Provider server!");
+            } else {
+              $('#wuText').append("Mean Temp: " + Math.round((data.meantempi-32)*5/9) + "&deg;C");
+              $('#wuText').append("<br/>Rain Today: " + Math.round((data.precip_today/100)*25.4) + "mm");
+              $('#wuText').append("<br/>Rain Yesterday: " + Math.round((data.precip/100)*25.4) + "mm");
+            }
+          }}); // ajax
+        }
+      </script>
+	  
+	  <nav class="navbar navbar-light" style="background-color: #e9e9e9;">
+		  <a class="navbar-brand navbar-text" href="R-index.htm"></a>
+		  <a class="navbar-brand navbar-text" href="R-index.htm">Automatic Sprinkler Controller</a>
+		  
+		  <div class="btn-group dropleft">
+			  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<i class="fa fa-cogs"></i>
+			  </button>
+			  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<a class="dropdown-item" href="./R-Settings.htm">Configuration</a>
+				<a class="dropdown-item" href="./R-Advanced.htm">Advanced</a>
+				<a class="dropdown-item" href="./R-Logs.htm">Logs</a>
+			  </div>
+			</div>
+	  </nav>
+	  
+	  
+	<div data-role="container" class="container">
+        
+		<div class="row mt-4">  
+			<div class="col">
+				<div class="card ">
+					<div class="card-header" style="background-color: #386fb7;" >Watering Schedule for My Controller</div>
+					<div class="card-body">
+						
+						<div class="col-md-4">
+							<div id="sgif" style="display:block">
+								<img src="rainbird.gif" height="70" width="90"><br/>
+								<span id="szone"></span> <span id="spantime">00:00</span>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div id="upcoming" style="display:block">
+							  <h3>Upcoming Schedules:</h3>
+							  <ul></ul>
+							</div>
+						</div>
+						
+						<div class="col-md-4">
+							<div data-role="fieldcontain">
+								<label for="systemz">Run Schedules</label>
+								<select class="form-control" name="systemz" id="systemz" data-role="slider">
+								<option value="off">Off</option>
+								<option value="on" selected>On</option>
+								</select>
+							</div>
+						</div>
+			
+					</div>
+				</div>
+			</div>
+		</div>
+			
+		<div class="row mt-4">  
+			<div class="col">
+				<div class="card ">
+					<div class="card-header" style="background-color: #f36d00;" >Sensors</div>
+					<div class="card-body">
+						
+					</div>
+				</div>
+		   </div>
+			<div class="col">
+				<div class="card ">
+					<div class="card-header" style="background-color: #25b852;" >Controller Status</div>
+					<div class="card-body">
+						
+					</div>
+				</div>
+		   </div>
+		   <div class="col">
+				<div class="card ">
+					<div class="card-header" style="background-color: #37B8CF;" >Observations</div>
+					<div class="card-body">
+						<div id="wuText"></div>
+					</div>
+				</div>
+		   </div>
+		   
+		</div>
+		
+		<div class="row mt-4">
+			<div class="col">
+			<ul class="list-group" data-role="listview" data-divider-theme="a" data-inset="true" data-split-theme="a">
+				<li class="list-group-item " data-theme="a">
+					<a href="R-Scheds.htm" data-transition="slide" id="schedules_lv" name="schedules_lv">Schedules
+						<span class="badge badge-primary badge-pill ui-li-count">0</span>
+					</a>
+				</li>		  
+				<li class="list-group-item" data-theme="a">
+					<a href="R-Manual.htm" data-transition="slide">Manual</a>
+				</li>
+				<li class="list-group-item" data-theme="a">
+					<a href="R-QSched.htm" data-transition="slide">Quick Schedule</a>
+				</li>
+				<li class="list-group-item " data-theme="a">
+					<a href="R-Zones.htm" data-transition="slide" id="zones_lv" name="zones_lv">Zones
+						<span class="badge badge-primary badge-pill ui-li-count">0</span>
+					</a>
+				</li>
+				<li class="list-group-item" data-theme="a">
+					<a href="R-PredictiveWeather.htm" data-transition="slide">Predictive Watering Adjustments</a>
+				</li>
+			</ul>
+			</div>
+		</div>
+				
+		<div class="row mt-4">
+			<div class="col">
+				<div id="timediv"></div>
+			</div>
+		</div>
+
+	</div> <!-- /container -->
+      
+		<footer class="footer">
+			<div class="container">
+				<div data-role="footer" class="footer-docs" data-theme="a">
+				<p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>
+				</div>
+			</div>
+		</footer>
+		
+    </div><!-- /page -->
+  </body>
+
+</html>

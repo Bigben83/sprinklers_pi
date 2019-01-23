@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <title>Manual Control</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="custom.css" />
+	<!-- <link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" type="text/css">
+    <script src="jquery/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script src="jquery/jquery.mobile-1.4.5.min.js" type="text/javascript"></script> -->
+    <!-- Latest compiled and minified CSS -->
+	
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-migrate-3.0.1.js"></script>
+	
+	<!-- https://github.com/gitbrent/bootstrap4-toggle -->
+	<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
+	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+	
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </head>
+  
+  <body>
+  
+    <div data-role="page" id="manual">
+      
+	  <script language="javascript">
+        
+      </script>
+      
+	  <nav class="navbar navbar-light" style="background-color: #e9e9e9;">
+		  <button type="button" onclick="window.location.href='./#page1';" class="btn btn-secondary">Back</button>
+		  <a class="navbar-brand navbar-text" href="#">Watering Adjustments</a>
+		  <a class="navbar-brand navbar-text" href="#"></a>
+	  </nav>
+	  
+        <!-- /header -->
+
+<div class="container" >
+	<br>
+	<style type="text/css">
+		.title-container {
+			margin-bottom:35px
+		}
+		.title-container h1 {
+			margin-top:0
+		}
+		.title-container .title {
+			font-size:24px;
+			color:#444;
+			text-align:center
+		}
+		.title-container .subtitle {
+			font-size:14px;
+			color:#888;
+			text-align:center;
+			margin-top:0
+		}
+	</style>
+	
+	<div class="title-container">
+		<h1 class="title ">Predictive Watering Adjustments</h1>
+		<div class="subtitle ">Manage your watering based on weather forecasts. Choose which adjustments to apply when editing a zone.</div>
+	</div>
+
+
+	<style type="text/css">
+		.slidecontainer {
+			min-height: 50px;
+		}
+	</style>
+
+
+<!-- ************************************************** --> 
+
+	<div class="content-bottom" >
+		<div class="text-center">
+			<div class="cards-container">
+			
+				<div class="row">
+				   <div class="col-md-4" >
+						<div class="header header-red"></div>
+						<div class="content-top-1">
+							<div class="first-row">
+								<i class="icon fa fa-thermometer-empty blue "></i>
+								<span class="text">Don't water when today's forecast temperature is less than</span>
+							</div>
+							<div class="second-row text-center">
+								<label class="switch toggle-switch-round">
+								  <input type="checkbox" value="1" name="wunderground">
+								  <span class="slider round"></span>
+								</label>
+								<div id="text-center"><span id="range"></span> %</div>
+							</div>
+							<div class="third-row">    
+								<div class="slidecontainer">
+								  <input type="range" min="0" max="40" step="10" value="8" class="rangeslider" id="myRange" onchange="showValue(this)" />
+								  <div>
+									<span class="figure-left">0 C</span>
+									<span class="figure-right">40 C</span>
+								  </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-md-4" >
+						<div class="header header-orange"></div>
+						<div class="content-top-1">
+							<div class="first-row">
+								<i class="icon fa fa-thermometer-empty orange "></i>
+								<span class="text"><span>Water <span class="editable-label">30</span>% less when today's forecast temperature is less than</span>
+							</div>
+							<div class="second-row text-center">
+								<label class="switch toggle-switch-round">
+								  <input type="checkbox" value="1" name="wunderground">
+								  <span class="slider round"></span>
+								</label>
+								<div id="text-center"><span id="range"></span> %</div>
+							</div>
+							<div class="third-row">    
+								<div class="slidecontainer">
+								  <input type="range" min="0" max="400" step="10" value="250" class="rangeslider" id="myRange" onchange="showValue(this)" />
+								  <div>
+									<span class="figure-left">0 C</span>
+									<span class="figure-right">40 C</span>
+								  </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-md-4" >
+						<div class="header header-green"></div>
+						<div class="content-top-1">
+							<div class="first-row">
+								<i class="icon fa fa-thermometer-empty red"></i>
+								<span>Water <span class="editable-label">30</span>% more when today's forecast temperature is above</span>
+							</div>
+							<div class="second-row text-center">
+								<div class="row">
+									<div class="col">
+										<label class="switch toggle-switch-round">
+										  <input type="checkbox" value="1" name="wunderground">
+										  <span class="slider round"></span>
+										</label>
+										<div id="text-center"><span id="range"></span> &deg;C</div>
+									</div>
+									<div class="col">
+										<div class="inline-text"><span>and humidity is below <span class="editable-label">100</span>%</span>
+										<label class="switch toggle-switch-round">
+										  <input type="checkbox" value="1" name="wunderground">
+										  <span class="slider round"></span>
+										</label>
+									</div>
+									</div>
+								</div>
+							</div>
+							<div class="third-row">    
+								<div class="slidecontainer">
+								  <input type="range" min="0" max="400" step="10" value="250" class="rangeslider" id="myRange" onchange="showValue(this)" />
+								  <div>
+									<span class="figure-left">0 C</span>
+									<span class="figure-right">40 C</span>
+								  </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row mt-3">
+				<div class="col" ></div>
+					<div class="col-md-4" >
+						<div class="header header-orange"></div>
+						<div class="content-top-1">
+							<div class="first-row">
+								<i class=" icon fas fa-cloud-sun-rain red"></i>
+								<span class="text">Don't water when the chance of rain is higher than</span>
+							</div>
+							<div class="second-row text-center">
+								<label class="switch toggle-switch-round">
+								  <input type="checkbox" value="1" name="wunderground">
+								  <span class="slider round"></span>
+								</label>
+								<div id="text-center"><span id="range"></span> %</div>
+							</div>
+							<div class="third-row">    
+								<div class="slidecontainer">
+								  <input type="range" min="0" max="100" step="10" value="80" class="rangeslider" id="myRange" onchange="showValue(this)" />
+								  <div>
+									<span class="figure-left">0 %</span>
+									<span class="figure-right">100 %</span>
+								  </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-md-4" >
+						<div class="header header-green"></div>
+						<div class="content-top-1">
+							<div class="first-row">
+								<i class="icon fas fa-wind red"></i>
+								<span class="text">Don't water when today's forecast wind speed is higher than</span>
+							</div>
+							<div class="second-row text-center">
+								<label class="switch toggle-switch-round">
+								  <input type="checkbox" value="1" name="wunderground">
+								  <span class="slider round"></span>
+								</label>
+								<div id="text-center"><span id="range"></span> km/h</div>
+							</div>
+							<div class="third-row">    
+								<div class="slidecontainer">
+								  <input type="range" min="0" max="100" step="10" value="30" class="rangeslider" id="myRange" onchange="showValue(this)" />
+								  <div>
+									<span class="figure-left">0 km/h</span>
+									<span class="figure-right">100 km/h</span>
+								  </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				<div class="col" ></div>
+				</div>
+				
+				<div class="row mt-3">
+				<div class="col" ></div>
+					<div class="col-md-4" >
+						<div class="header header-orange"></div>
+						<div class="content-top-1">
+							<div class="body">
+								<div class="card-row-container">
+									<div class="first-row">
+										<i class="icon fa fa-thermometer-full orange "></i>
+										<span class="text">Use forecast temperature to predict smart watering</span>
+									</div>
+									<div class="second-row text-center">
+										<span class="toggle-switch-round  green checked">
+											<span class="toggle-switch-inner">
+											</span>
+										</span>
+										<label class="switch toggle-switch-round">
+											<input type="checkbox" value="1" name="wunderground">
+											<span class="slider round"></span>
+										</label>	
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4" >
+						<div class="header header-orange"></div>
+						<div class="content-top-1">
+							<div class="body">
+								<div class="card-row-container">
+									<div class="first-row">
+										<i class="icon fas fa-poo-storm orange"></i>
+										<span class="text">Use forecast rainfall to predict smart watering</span>
+									</div>
+									<div class="second-row text-center">
+										<span class="toggle-switch-round  green checked">
+											<span class="toggle-switch-inner">
+											</span>
+										</span>
+										<label class="switch toggle-switch-round">
+											<input type="checkbox" value="1" name="wunderground">
+											<span class="slider round"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				<div class="col" ></div>
+				</div>
+				
+				<div class="row mt-5">
+					<div class="container text-center">
+						<h3 class="title ">Weather Station Adjustments</h3>
+							<p>Automatically stop your watering based measurements from your weather stations</p>
+					</div>
+				</div>
+				
+				<div class="row mt-3">
+				<div class="col" ></div>
+					<div class="col-md-4" >
+						<div class="header header-red"></div>
+						<div class="content-top-1">
+							<div class="first-row">
+								<i class="icon fas fa-cloud-rain red"></i>
+								<span class="text">Don't water when the last 24hr rainfall is higher than</span>
+							</div>
+							<div class="second-row text-center">
+								<label class="switch toggle-switch-round">
+								  <input type="checkbox" value="1" name="wunderground">
+								  <span class="slider round"></span>
+								</label>
+								<div id="text-center"><span id="range"></span> mm</div>
+							</div>
+							<div class="third-row">    
+								<div class="slidecontainer">
+								  <input type="range" min="0" max="500" step="10"  value="30" class="rangeslider" id="myRange" onchange="showValue(this)" />
+								  <div>
+									<span class="figure-left">0 mm</span>
+									<span class="figure-right">50 mm</span>
+								  </div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-md-4" >
+						<div class="header header-red"></div>
+						<div class="content-top-1">
+							<div class="first-row">
+								<i class="icon fas fa-cloud-sun-rain red"></i>
+								<span class="text"><span>Don't water when the last <span class="editable-label">7</span> days rainfall is higher than</span>
+							</div>
+							<div class="second-row text-center">
+								<label class="switch toggle-switch-round">
+								  <input type="checkbox" value="1" name="wunderground">
+								  <span class="slider round"></span>
+								</label>
+								<div id="text-center"><span id="range"></span> mm</div>
+							</div>
+							<div class="third-row">    
+								<div class="slidecontainer">
+								  <input type="range" min="0" max="500" step="10"  value="100" class="rangeslider" id="myRange" onchange="showValue(this)" />
+								  <div>
+									<span class="figure-left">0 mm</span>
+									<span class="figure-right">50 mm</span>
+								  </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				<div class="col" ></div>	
+				</div>
+
+			</div>
+		</div>
+	</div><!-- content-bottom -->
+
+<div class="clearfix"> </div>
+
+</div> <!-- end of Container -->
+
+<!-- Range Slider Values -->
+<script type='text/javascript'>
+    var rangeslider = document.getElementById("myRange");
+    var output = document.getElementById("range");
+    output.innerHTML = rangeslider.value; // Display the default rangeslider value
+    
+    // Update the current rangeslider value (each time you drag the rangeslider handle)
+    rangeslider.oninput = function() {
+      output.innerHTML = this.value;
+    }
+</script>
+
+
+<!-- Only Single Checkbox -->
+<script type='text/javascript'>
+    $('input[type="checkbox"]').on('change', function() {
+       $('input[type="checkbox"]').not(this).prop('checked', false);
+    });
+</script>
+
+
+<!-- Save API Keys to Database -->
+<script type"text/javascript">
+function showEdit(editableObj) {
+        $(editableObj).css("background", "#97e499");
+    }
+function save(editableObj, column, id) {
+    $(editableObj).css("background", "#FDFDFD");
+    $.ajax({
+        type: "POST",
+        url: "[[~64]]",
+        data: 'column=' + column + '&editval=' + editableObj.innerHTML + '&id=' + id,
+        success: function(data) {
+            alert(column + editableObj.innerHTML);
+            $(editableObj).css("background", "white");
+        }
+    });
+}
+</script>
+
+
+
+      <!-- /content -->
+		<footer class="footer">
+			<div class="container">
+				<div data-role="footer" class="footer-docs" data-theme="a">
+				<p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>
+				</div>
+			</div>
+		</footer>
+	
+	  
+    <!-- /page -->
+  </body>
+</html>
