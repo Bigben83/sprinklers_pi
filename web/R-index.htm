@@ -58,13 +58,19 @@
                             </div>
 
                             <div class="col-lg-4">
-                                <div data-role="fieldcontain">
+                                <!-- <div data-role="fieldcontain">
                                     <label for="systemz">Run Schedules</label>
-                                    <select class="form-control" name="systemz" id="systemz" data-role="slider">
+                                    <select class="form-control" name="systemz1" id="systemz1" data-role="slider">
                                         <option value="off">Off</option>
                                         <option value="on" selected>On</option>
                                     </select>
-                                </div>
+                                </div> -->
+								<div class="checkbox">
+									<label for="systemz">
+										<input type="checkbox" name="systemz" id="systemz" data-toggle="toggle">
+										Run Schedules
+									</label>
+								</div>
                             </div>
 
                         </div>
@@ -212,7 +218,7 @@
 		});
 
 		function checkAnim(data) {
-			$('#systemz').val(data.run).slider('refresh');
+			$('#systemz').val(data.run).bootstrapToggle('refresh');
 			if (data.offtime != null) {
 				timeout = (new Date().getTime()) / 1000 + parseInt(data.offtime, 10);
 				$('#szone').text(data.onzone);
