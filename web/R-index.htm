@@ -12,125 +12,6 @@
     <!-- https://github.com/gitbrent/bootstrap4-toggle -->
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 	
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-	
-		<script language="javascript" type="text/javascript">
-		var getUpcomingSched = function() {
-			$.ajax("json/schedules", {
-				async: true,
-				dataType: "json",
-				success: function(data) {
-					var output = '';
-					var found = false;
-					for (var i = 0; i < data.Table.length; i += 1) {
-						if (data.Table[i].e == 'on' && (data.Table[i].td || data.Table[i].tm)) {
-							found = true;
-							output += '<li><a href="ShSched.htm?id=' + data.Table[i].id + '" data-transition="slide">';
-							output += data.Table[i].name;
-							output += ': ';
-							output += data.Table[i].next;
-							output += '</a></li>';
-						}
-					}
-					if (found) {
-						$('#upcoming').show().find('ul').empty().append(output);
-					} else {
-						$('#upcoming').hide();
-					}
-				}
-			});
-		};
-		$(document).on('pageinit', function() {
-			$('#systemz').on('change', function(e) {
-				$.get("bin/run", {
-					system: this.value
-				}).then(getUpcomingSched);
-			});
-		});
-		var timeout = 0;
-
-		function pad(n, width, z) {
-			z = z || '0';
-			n = n + '';
-			return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-		}
-		$('page1').ready(function() {
-			$.ajax("json/state", {
-				async: false,
-				dataType: "json",
-				error: function() {
-					alert("Communications Failure");
-				},
-				success: function(data) {
-					$('#zones_lv').find('span').text(data.zones);
-					$('#schedules_lv').find('span').text(data.schedules);
-					var dt = new Date(data.timenow * 1000);
-					$('#version').text("V" + data.version);
-					$('#timediv').empty().append('' + pad(dt.getUTCHours(), 2) + ':' + pad(dt.getUTCMinutes(), 2) + ':' + pad(dt.getUTCSeconds(), 2) + ' ' + pad(dt.getUTCFullYear(), 4) + '/' + pad(dt.getUTCMonth() + 1, 2) + '/' + pad(dt.getUTCDate(), 2));
-					checkAnim(data);
-					getUpcomingSched();
-				}
-			});
-		});
-
-		function checkAnim(data) {
-			$('#systemz').val(data.run).slider('refresh');
-			if (data.offtime != null) {
-				timeout = (new Date().getTime()) / 1000 + parseInt(data.offtime, 10);
-				$('#szone').text(data.onzone);
-				$('#sgif').css('display', 'block');
-				if (parseInt(data.offtime, 10) == 99999) {
-					$('#spantime').text("--:--");
-				} else {
-					window.setTimeout(function() {
-						updateAnim();
-					}, 1);
-				}
-			} else {
-				$('#sgif').css('display', 'none');
-			}
-		}
-
-		function updateAnim() {
-			if ($.mobile.activePage.attr("id") != "page1") {
-				return;
-			}
-			var remaining = Math.floor(timeout - (new Date().getTime()) / 1000);
-			if (remaining >= 0) {
-				$('#spantime').text(
-					Math.floor(remaining / 60).toString() + ":" +
-					("00" + (remaining % 60).toString()).substr(-2));
-				window.setTimeout(function() {
-					updateAnim();
-				}, 1000);
-			} else {
-				$.getJSON("json/state", checkAnim);
-			}
-		}
-
-		function showWeather() {
-			$.ajax("json/wcheck", {
-				async: false,
-				dataType: "json",
-				success: function(data) {
-					if (data.noprovider == "true") {
-						$('#wuText').empty().append("No Weather Provider defined in settings.h");
-					} else if (data.keynotfound == "true") {
-						$('#wuText').empty().append("Weather Provider API Key is invalid!");
-					} else if (data.valid == "false") {
-						$('#wuText').empty().append("Invalid Response from Weather Provider server!");
-					} else {
-						$('#wuText').append("Mean Temp: " + Math.round((data.meantempi - 32) * 5 / 9) + "&deg;C");
-						$('#wuText').append("<br/>Rain Today: " + Math.round((data.precip_today / 100) * 25.4) + "mm");
-						$('#wuText').append("<br/>Rain Yesterday: " + Math.round((data.precip / 100) * 25.4) + "mm");
-					}
-				}
-			}); // ajax
-		}
-	</script>
-	
 </head>
 
 
@@ -266,7 +147,125 @@
     <!-- /page -->
 	
 	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 	
+		<script language="javascript" type="text/javascript">
+		var getUpcomingSched = function() {
+			$.ajax("json/schedules", {
+				async: true,
+				dataType: "json",
+				success: function(data) {
+					var output = '';
+					var found = false;
+					for (var i = 0; i < data.Table.length; i += 1) {
+						if (data.Table[i].e == 'on' && (data.Table[i].td || data.Table[i].tm)) {
+							found = true;
+							output += '<li><a href="ShSched.htm?id=' + data.Table[i].id + '" data-transition="slide">';
+							output += data.Table[i].name;
+							output += ': ';
+							output += data.Table[i].next;
+							output += '</a></li>';
+						}
+					}
+					if (found) {
+						$('#upcoming').show().find('ul').empty().append(output);
+					} else {
+						$('#upcoming').hide();
+					}
+				}
+			});
+		};
+		$(document).on('pageinit', function() {
+			$('#systemz').on('change', function(e) {
+				$.get("bin/run", {
+					system: this.value
+				}).then(getUpcomingSched);
+			});
+		});
+		var timeout = 0;
+
+		function pad(n, width, z) {
+			z = z || '0';
+			n = n + '';
+			return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+		}
+		$('page1').ready(function() {
+			$.ajax("json/state", {
+				async: false,
+				dataType: "json",
+				error: function() {
+					alert("Communications Failure");
+				},
+				success: function(data) {
+					$('#zones_lv').find('span').text(data.zones);
+					$('#schedules_lv').find('span').text(data.schedules);
+					var dt = new Date(data.timenow * 1000);
+					$('#version').text("V" + data.version);
+					$('#timediv').empty().append('' + pad(dt.getUTCHours(), 2) + ':' + pad(dt.getUTCMinutes(), 2) + ':' + pad(dt.getUTCSeconds(), 2) + ' ' + pad(dt.getUTCFullYear(), 4) + '/' + pad(dt.getUTCMonth() + 1, 2) + '/' + pad(dt.getUTCDate(), 2));
+					checkAnim(data);
+					getUpcomingSched();
+					
+				}
+			});
+		});
+
+		function checkAnim(data) {
+			$('#systemz').val(data.run).slider('refresh');
+			if (data.offtime != null) {
+				timeout = (new Date().getTime()) / 1000 + parseInt(data.offtime, 10);
+				$('#szone').text(data.onzone);
+				$('#sgif').css('display', 'block');
+				if (parseInt(data.offtime, 10) == 99999) {
+					$('#spantime').text("--:--");
+				} else {
+					window.setTimeout(function() {
+						updateAnim();
+					}, 1);
+				}
+			} else {
+				$('#sgif').css('display', 'none');
+			}
+		}
+
+		function updateAnim() {
+			if ($.mobile.activePage.attr("id") != "page1") {
+				return;
+			}
+			var remaining = Math.floor(timeout - (new Date().getTime()) / 1000);
+			if (remaining >= 0) {
+				$('#spantime').text(
+					Math.floor(remaining / 60).toString() + ":" +
+					("00" + (remaining % 60).toString()).substr(-2));
+				window.setTimeout(function() {
+					updateAnim();
+				}, 1000);
+			} else {
+				$.getJSON("json/state", checkAnim);
+			}
+		}
+
+		function showWeather() {
+			$.ajax("json/wcheck", {
+				async: false,
+				dataType: "json",
+				success: function(data) {
+					if (data.noprovider == "true") {
+						$('#wuText').empty().append("No Weather Provider defined in settings.h");
+					} else if (data.keynotfound == "true") {
+						$('#wuText').empty().append("Weather Provider API Key is invalid!");
+					} else if (data.valid == "false") {
+						$('#wuText').empty().append("Invalid Response from Weather Provider server!");
+					} else {
+						$('#wuText').append("Mean Temp: " + Math.round((data.meantempi - 32) * 5 / 9) + "&deg;C");
+						$('#wuText').append("<br/>Rain Today: " + Math.round((data.precip_today / 100) * 25.4) + "mm");
+						$('#wuText').append("<br/>Rain Yesterday: " + Math.round((data.precip / 100) * 25.4) + "mm");
+					}
+				}
+			}); // ajax
+		}
+	</script>
 
 
 </body>
