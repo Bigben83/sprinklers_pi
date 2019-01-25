@@ -4,49 +4,18 @@
 <head>
     <title>Weather Check</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<!-- <link rel="stylesheet" href="custom.css" /> -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	
-	<!-- https://github.com/gitbrent/bootstrap4-toggle -->
-	<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
-	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
-	
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <!-- https://github.com/gitbrent/bootstrap4-toggle -->
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 	
 </head>
 
 <body>
 <div data-role="page" id="wcheck">
-    <script language="javascript">
-        $('#wcheck').on('pagebeforeshow', function () {
-            $('#wuText').empty().append("Requesting Data from Weather Provider...");
-            $.ajax("json/wcheck", {async: true, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
-                    if (data.noprovider == "true") {
-                        $('#wuText').empty().append("No Weather Provider defined in settings.h");
-                    } else if (data.keynotfound == "true") {
-                        $('#wuText').empty().append("Weather Provider API Key is invalid!");
-                    } else if (data.valid == "false") {
-                        $('#wuText').empty().append("Invalid Response from Weather Provider server!");
-                    } else {
-                        $('#wuText').empty().append("Resolved Weather Provider IP: " + data.resolvedIP);
-                        $('#wuText').append("<br/>Min Humidity: " + data.minhumidity + "%");
-                        $('#wuText').append("<br/>Max Humidity: " + data.maxhumidity + "%");
-                        $('#wuText').append("<br/>Mean Temp: " + data.meantempi + "&deg;F");
-                        $('#wuText').append("<br/>Precip Today: " + data.precip_today/100 + "\"");
-                        $('#wuText').append("<br/>Precip Yesterday: " + data.precip/100 + "\"");
-                        $('#wuText').append("<br/>Wind Yesterday: " + data.wind_mph/10 + "mph");
-                        $('#wuText').append("<br/>UV Now: " + data.UV/10 + " ");
-                        $('#wuText').append("<br/>Overall Scale: " + data.scale + "%");
-                    }
-                }}); // ajax
-        }); // on pagebeforeshow handler
-
-    </script>
  
 	<nav class="navbar navbar-light" style="background-color: #e9e9e9;">
 		<a class="navbar-brand navbar-text" href="R-index.htm"></a>
@@ -73,5 +42,36 @@
 		</footer>
 </div>
 <!-- /page -->
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+	
+	<script language="javascript">
+        $('#wcheck').ready(function () {
+            $('#wuText').empty().append("Requesting Data from Weather Provider...");
+            $.ajax("json/wcheck", {async: true, dataType: "json", error: function () { alert ("Communications Failure" ); }, success: function (data) {
+                    if (data.noprovider == "true") {
+                        $('#wuText').empty().append("No Weather Provider defined in settings.h");
+                    } else if (data.keynotfound == "true") {
+                        $('#wuText').empty().append("Weather Provider API Key is invalid!");
+                    } else if (data.valid == "false") {
+                        $('#wuText').empty().append("Invalid Response from Weather Provider server!");
+                    } else {
+                        $('#wuText').empty().append("Resolved Weather Provider IP: " + data.resolvedIP);
+                        $('#wuText').append("<br/>Min Humidity: " + data.minhumidity + "%");
+                        $('#wuText').append("<br/>Max Humidity: " + data.maxhumidity + "%");
+                        $('#wuText').append("<br/>Mean Temp: " + data.meantempi + "&deg;F");
+                        $('#wuText').append("<br/>Precip Today: " + data.precip_today/100 + "\"");
+                        $('#wuText').append("<br/>Precip Yesterday: " + data.precip/100 + "\"");
+                        $('#wuText').append("<br/>Wind Yesterday: " + data.wind_mph/10 + "mph");
+                        $('#wuText').append("<br/>UV Now: " + data.UV/10 + " ");
+                        $('#wuText').append("<br/>Overall Scale: " + data.scale + "%");
+                    }
+                }}); // ajax
+        }); // on pagebeforeshow handler
+
+    </script>
+	
 </body>
 </html>

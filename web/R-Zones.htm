@@ -152,7 +152,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 	
 		<script language="javascript">
-			$('#zones').readyfunction () {
+			$('#zones').ready(function () {
 			  $.getJSON("json/zones", function (data) {
 				for (var i = 0; i < data.zones.length; i++) {
 				  addZoneCtl(i + 1, data.zones[i].name, data.zones[i].enabled, data.zones[i].pump);

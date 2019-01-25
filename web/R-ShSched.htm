@@ -4,33 +4,206 @@
 <head>
 	<title>Edit Schedule</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<!-- <link rel="stylesheet" href="custom.css" /> -->
-	
-	<script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
-	<script>
-	  window.TrackJS && TrackJS.install({ 
-		token: "77c60ae605bd405293438163ca05213a",
-		application: "irrigation"
-	  });
-	</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	
-	<!-- https://github.com/gitbrent/bootstrap4-toggle -->
-	<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">  
-	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
-	
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <!-- https://github.com/gitbrent/bootstrap4-toggle -->
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 	
 </head>
   
 <body>
 
+	<nav class="navbar navbar-light" style="background-color: #e9e9e9;">
+		<button type="button" onclick="javascript:doDelete();" class="btn btn-secondary">Delete</button>
+		<a class="navbar-brand navbar-text" href="R-index.htm">Edit Watering Schedule</a>
+		<button type="button" href="#schedules" class="btn btn-secondary">Cancel</button>
+	</nav>
+	<!-- /header -->
+	
+<div class="container">
+	<div class="row mt-4">
+		<div class="col">
+		
+			<div data-role="content">
+				<form id="sForm" action="#" method="get" data-ajax="false">
+					<div class="form-group" style="display:none">
+						<input class="form-control" type="text" name="id" id="id" value="" />
+					</div>
+					<div class="form-group row" data-role="fieldcontain">
+						<label class="col-sm-2 col-form-label" for="name">Name:</label>
+						<div class="col-sm-10">
+							<input class="form-control" type="text" name="name" id="name" value="" maxlength=19 />
+						</div>
+					</div>
+					
+					<div class="form-group row" data-role="fieldcontain">
+						<label class="col-sm-2 col-form-label" for="enable">Enabled:</label>
+						<div class="col-sm-10">
+							<input type="checkbox" name="enable" id="enable" data-toggle="toggle" >
 
+						</div>
+					</div>
+					
+					<div class="form-group row" data-role="fieldcontain">
+						<label class="col-sm-2 col-form-label" name="type">Type:</label>
+						<div class="col-sm-10">
+							<input type="checkbox" checked name="type" id="radio-choice-c" data-toggle="toggle" data-on="Day" data-off="Interval">
+						</div>
+					</div>
+					<!-- 
+					<div class="form-group" data-role="fieldcontain">
+						<fieldset data-role="controlgroup" data-type="horizontal">
+							<legend>Type:</legend>
+							<input class="form-control" type="radio" name="type" id="radio-choice-c" value="on" onclick="ToggleState()" checked="checked" />
+							<label for="radio-choice-c">Day</label>
+							<input class="form-control" type="radio" name="type" id="radio-choice-d" value="off" onclick="ToggleState()" />
+							<label for="radio-choice-d">Interval</label>
+						</fieldset>
+					</div>
+					-->
+					<style>
+						.week-list.btn.btn-secondary {
+							color: #000000;
+							background-color: #f6f6f6;
+							border-color: #ced4da;
+						}
+						.week-list.btn.btn-secondary:hover {
+							color: #43a047;
+							background-color: #007bff;
+							border-color: #ced4da;
+						}
+						.week-list.btn.btn-secondary:focus {
+							background-color: #ced4da;
+							border-color: #ced4da;
+						}
+					</style>
+					<div class="form-group row" id="days_input">
+						<label class="col-sm-2 col-form-label">Days of Week:</label>
+						<div class="col-sm-10">
+							<div class="week-list form-check form-check-inline">
+								<div class="col btn-group-toggle" data-toggle="buttons">
+									<label class="btn btn-secondary " for="d1">
+									<input type="checkbox" name="d1" id="d1" data-mini="true" autocomplete="off">Sunday
+									</label>
+								</div>
+								<div class="col btn-group-toggle" data-toggle="buttons">
+									<label class="btn btn-secondary " for="d2">
+									<input type="checkbox" name="d2" id="d2" data-mini="true" autocomplete="off">Monday
+									</label>
+								</div>
+								<div class="col btn-group-toggle" data-toggle="buttons">
+									<label class="btn btn-secondary " for="d3">
+									<input type="checkbox" name="d3" id="d3" data-mini="true" autocomplete="off">Tueday
+									</label>
+								</div>
+								<div class="col btn-group-toggle" data-toggle="buttons">
+									<label class="btn btn-secondary " for="d4">
+									<input type="checkbox" name="d4" id="d4" data-mini="true" autocomplete="off">Wednesday
+									</label>
+								</div>
+								<div class="col btn-group-toggle" data-toggle="buttons">
+									<label class="btn btn-secondary " for="d5">
+									<input type="checkbox" name="d5" id="d5" data-mini="true" autocomplete="off">Thursday
+									</label>
+								</div>
+								<div class="col btn-group-toggle" data-toggle="buttons">
+									<label class="btn btn-secondary " for="d6">
+									<input type="checkbox" name="d6" id="d6" data-mini="true" autocomplete="off">Friday
+									</label>
+								</div>
+								<div class="col btn-group-toggle" data-toggle="buttons">
+									<label class="btn btn-secondary " for="d7">
+									<input type="checkbox" name="d7" id="d7" data-mini="true" autocomplete="off">Saturday
+									</label>
+								</div>										
+
+							</div>
+						</div>
+					</div>
+					
+					<div class="form-group row" id="interval_input" style="display:none">
+						<label class="col-sm-2 col-form-label" for="interval">Interval:</label>
+						<div class="col-sm-10">
+							<input class="form-control" type="range" name="interval" id="interval" max="20" min="1" value="1" />
+						</div>
+					</div>
+				  
+					<div class="form-group row">
+						<div class="col-sm-2 col-form-label">Time 1:</div>
+							<div class="col-sm-8">
+							  <input class="form-control" type="time" name="t1" id="t1" data-mini="true" />
+							</div>
+						<div class="col-sm-2">
+							<input id="e1" name="e1" type="checkbox" onchange="javascript:$('#t1').textinput(!this.checked?'enable':'disable');">
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<div class="col-sm-2 col-form-label">Time 2:</div>
+							<div class="col-sm-8">
+							  <input class="form-control" type="time" name="t2" id="t2" data-mini="true" />
+							</div>
+						<div class="col-sm-2">
+							<input id="e2" name="e2" type="checkbox" onchange="javascript:$('#t2').textinput(!this.checked?'enable':'disable');">
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<div class="col-sm-2 col-form-label">Time 3:</div>
+							<div class="col-sm-8">
+							  <input class="form-control" type="time" name="t3" id="t3" data-mini="true" />
+							</div>
+						<div class="col-sm-2">
+							<input id="e3" name="e3" type="checkbox" onchange="javascript:$('#t3').textinput(!this.checked?'enable':'disable');">
+						</div>
+					</div>
+					
+					<div class="form-group row">
+						<div class="col-sm-2 col-form-label">Time 4:</div>
+							<div class="col-sm-8">
+							  <input class="form-control" type="time" name="t4" id="t4" data-mini="true" />
+							</div>
+						<div class="col-sm-2">
+							<input id="e4" name="e4" type="checkbox" onchange="javascript:$('#t4').textinput(!this.checked?'enable':'disable');">
+						</div>
+					</div>
+
+					<div id='zones'></div>
+
+					<div class="form-group row" data-role="fieldcontain">
+						<label class="col-sm-2 col-form-label" for="enable">Weather Adjust:</label>
+						<div class="col-sm-10">
+							<input type="checkbox"  name="wadj" id="wadj" >
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<a data-role="button" class="btn btn-primary" href='#' onClick="javascript:mySubmitForm();">Save</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /content -->
+
+<footer class="footer">
+	<div class="container">
+		<div data-role="footer" class="footer-docs" data-theme="a">
+		<p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>
+		</div>
+	</div>
+</footer>
+		
+<!-- /page -->
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+	
 	<script type="text/javascript">
 		function ToggleState() {
 		  if (document.getElementById('radio-choice-c').checked) {
@@ -42,7 +215,7 @@
 		  }
 		} // ToggleState
 
-		$('#showsched').on('pagebeforeshow', function () {
+		$('#showsched').ready(function () {
 		   var qs = (function (a) {
 			if (a == "") return {};
 			var b = {};
@@ -146,244 +319,68 @@
 		  });
 		}
 		</script>
-
-	<nav class="navbar navbar-light" style="background-color: #e9e9e9;">
-		<button type="button" onclick="javascript:doDelete();" class="btn btn-secondary">Delete</button>
-		<a class="navbar-brand navbar-text" href="R-index.htm">Edit Watering Schedule</a>
-		<button type="button" href="#schedules" class="btn btn-secondary">Cancel</button>
-	</nav>
-	<!-- /header -->
-	
-<div class="container">
-	<div class="row mt-4">
-		<div class="col">
 		
-			<div data-role="content">
-				<form id="sForm" action="#" method="get" data-ajax="false">
-					<div class="form-group" style="display:none">
-						<input class="form-control" type="text" name="id" id="id" value="" />
-					</div>
-					<div class="form-group row" data-role="fieldcontain">
-						<label class="col-sm-2 col-form-label" for="name">Name:</label>
-						<div class="col-sm-10">
-							<input class="form-control" type="text" name="name" id="name" value="" maxlength=19 />
-						</div>
-					</div>
-					
-					<div class="form-group row" data-role="fieldcontain">
-						<label class="col-sm-2 col-form-label" for="enable">Enabled:</label>
-						<div class="col-sm-10">
-							<input type="checkbox" name="enable" id="enable" data-toggle="toggle" >
-								<script>
-								  $(function() {
-									$('#enable').bootstrapToggle({
-									  on: 'On',
-									  off: 'Off'
-									});
-								  })
-								</script>
-						</div>
-					</div>
-					
-					<div class="form-group row" data-role="fieldcontain">
-						<label class="col-sm-2 col-form-label" name="type">Type:</label>
-						<div class="col-sm-10">
-							<input type="checkbox" checked name="type" id="radio-choice-c" data-toggle="toggle" data-on="Day" data-off="Interval">
-								<script>
-								  $(function() {
-									$('#radio-choice-c').bootstrapToggle({
-									  on: 'Day',
-									  off: 'Interval'
-									});
-								  })
-								</script>
-						</div>
-					</div>
-					<!-- 
-					<div class="form-group" data-role="fieldcontain">
-						<fieldset data-role="controlgroup" data-type="horizontal">
-							<legend>Type:</legend>
-							<input class="form-control" type="radio" name="type" id="radio-choice-c" value="on" onclick="ToggleState()" checked="checked" />
-							<label for="radio-choice-c">Day</label>
-							<input class="form-control" type="radio" name="type" id="radio-choice-d" value="off" onclick="ToggleState()" />
-							<label for="radio-choice-d">Interval</label>
-						</fieldset>
-					</div>
-					-->
-					<style>
-						.week-list.btn.btn-secondary {
-							color: #000000;
-							background-color: #f6f6f6;
-							border-color: #ced4da;
-						}
-						.week-list.btn.btn-secondary:hover {
-							color: #43a047;
-							background-color: #007bff;
-							border-color: #ced4da;
-						}
-						.week-list.btn.btn-secondary:focus {
-							background-color: #ced4da;
-							border-color: #ced4da;
-						}
-					</style>
-					<div class="form-group row" id="days_input">
-						<label class="col-sm-2 col-form-label">Days of Week:</label>
-						<div class="col-sm-10">
-							<div class="week-list form-check form-check-inline">
-								<div class="col btn-group-toggle" data-toggle="buttons">
-									<label class="btn btn-secondary " for="d1">
-									<input type="checkbox" name="d1" id="d1" data-mini="true" autocomplete="off">Sunday
-									</label>
-								</div>
-								<div class="col btn-group-toggle" data-toggle="buttons">
-									<label class="btn btn-secondary " for="d2">
-									<input type="checkbox" name="d2" id="d2" data-mini="true" autocomplete="off">Monday
-									</label>
-								</div>
-								<div class="col btn-group-toggle" data-toggle="buttons">
-									<label class="btn btn-secondary " for="d3">
-									<input type="checkbox" name="d3" id="d3" data-mini="true" autocomplete="off">Tueday
-									</label>
-								</div>
-								<div class="col btn-group-toggle" data-toggle="buttons">
-									<label class="btn btn-secondary " for="d4">
-									<input type="checkbox" name="d4" id="d4" data-mini="true" autocomplete="off">Wednesday
-									</label>
-								</div>
-								<div class="col btn-group-toggle" data-toggle="buttons">
-									<label class="btn btn-secondary " for="d5">
-									<input type="checkbox" name="d5" id="d5" data-mini="true" autocomplete="off">Thursday
-									</label>
-								</div>
-								<div class="col btn-group-toggle" data-toggle="buttons">
-									<label class="btn btn-secondary " for="d6">
-									<input type="checkbox" name="d6" id="d6" data-mini="true" autocomplete="off">Friday
-									</label>
-								</div>
-								<div class="col btn-group-toggle" data-toggle="buttons">
-									<label class="btn btn-secondary " for="d7">
-									<input type="checkbox" name="d7" id="d7" data-mini="true" autocomplete="off">Saturday
-									</label>
-								</div>										
-
-							</div>
-						</div>
-					</div>
-					
-					<div class="form-group row" id="interval_input" style="display:none">
-						<label class="col-sm-2 col-form-label" for="interval">Interval:</label>
-						<div class="col-sm-10">
-							<input class="form-control" type="range" name="interval" id="interval" max="20" min="1" value="1" />
-						</div>
-					</div>
-				  
-					<div class="form-group row">
-						<div class="col-sm-2 col-form-label">Time 1:</div>
-							<div class="col-sm-8">
-							  <input class="form-control" type="time" name="t1" id="t1" data-mini="true" />
-							</div>
-						<div class="col-sm-2">
-							<input id="e1" name="e1" type="checkbox" onchange="javascript:$('#t1').textinput(!this.checked?'enable':'disable');">
-								<script>
-								  $(function() {
-									$('#e1').bootstrapToggle({
-									  on: 'On',
-									  off: 'Off'
-									});
-								  })
-								</script>
-						</div>
-					</div>
-					
-					<div class="form-group row">
-						<div class="col-sm-2 col-form-label">Time 2:</div>
-							<div class="col-sm-8">
-							  <input class="form-control" type="time" name="t2" id="t2" data-mini="true" />
-							</div>
-						<div class="col-sm-2">
-							<input id="e2" name="e2" type="checkbox" onchange="javascript:$('#t2').textinput(!this.checked?'enable':'disable');">
-								<script>
-								  $(function() {
-									$('#e2').bootstrapToggle({
-									  on: 'On',
-									  off: 'Off'
-									});
-								  })
-								</script>
-						</div>
-					</div>
-					
-					<div class="form-group row">
-						<div class="col-sm-2 col-form-label">Time 3:</div>
-							<div class="col-sm-8">
-							  <input class="form-control" type="time" name="t3" id="t3" data-mini="true" />
-							</div>
-						<div class="col-sm-2">
-							<input id="e3" name="e3" type="checkbox" onchange="javascript:$('#t3').textinput(!this.checked?'enable':'disable');">
-								<script>
-								  $(function() {
-									$('#e3').bootstrapToggle({
-									  on: 'On',
-									  off: 'Off'
-									});
-								  })
-								</script>
-						</div>
-					</div>
-					
-					<div class="form-group row">
-						<div class="col-sm-2 col-form-label">Time 4:</div>
-							<div class="col-sm-8">
-							  <input class="form-control" type="time" name="t4" id="t4" data-mini="true" />
-							</div>
-						<div class="col-sm-2">
-							<input id="e4" name="e4" type="checkbox" onchange="javascript:$('#t4').textinput(!this.checked?'enable':'disable');">
-								<script>
-								  $(function() {
-									$('#e4').bootstrapToggle({
-									  on: 'On',
-									  off: 'Off'
-									});
-								  })
-								</script>
-						</div>
-					</div>
-
-					<div id='zones'></div>
-
-					<div class="form-group row" data-role="fieldcontain">
-						<label class="col-sm-2 col-form-label" for="enable">Weather Adjust:</label>
-						<div class="col-sm-10">
-							<input type="checkbox"  name="wadj" id="wadj" >
-								<script>
-								  $(function() {
-									$('#wadj').bootstrapToggle({
-									  on: 'On',
-									  off: 'Off'
-									});
-								  })
-								</script>
-						</div>
-					</div>
-
-					<div class="form-group row">
-						<a data-role="button" class="btn btn-primary" href='#' onClick="javascript:mySubmitForm();">Save</a>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- /content -->
-
-<footer class="footer">
-	<div class="container">
-		<div data-role="footer" class="footer-docs" data-theme="a">
-		<p>Powered by <a href="https://github.com/rszimm/sprinklers_pi/wiki">Sprinklers Pi</a> <span id="version"></span></p>
-		</div>
-	</div>
-</footer>
+		<script>
+		  $(function() {
+			$('#wadj').bootstrapToggle({
+			  on: 'On',
+			  off: 'Off'
+			});
+		  })
+		</script>
 		
-<!-- /page -->
+		<script>
+		  $(function() {
+			$('#e4').bootstrapToggle({
+			  on: 'On',
+			  off: 'Off'
+			});
+		  })
+		</script>
+		
+		<script>
+		  $(function() {
+			$('#e3').bootstrapToggle({
+			  on: 'On',
+			  off: 'Off'
+			});
+		  })
+		</script>
+
+		<script>
+		  $(function() {
+			$('#e1').bootstrapToggle({
+			  on: 'On',
+			  off: 'Off'
+			});
+		  })
+		</script>
+		
+		<script>
+		  $(function() {
+			$('#e2').bootstrapToggle({
+			  on: 'On',
+			  off: 'Off'
+			});
+		  })
+		</script>
+		
+		<script>
+		  $(function() {
+			$('#radio-choice-c').bootstrapToggle({
+			  on: 'Day',
+			  off: 'Interval'
+			});
+		  })
+		</script>
+		
+		<script>
+		  $(function() {
+			$('#enable').bootstrapToggle({
+			  on: 'On',
+			  off: 'Off'
+			});
+		  })
+		</script>
  </body>
 </html>
