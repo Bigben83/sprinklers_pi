@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   
-  <head>
+<head>
     <title>Manual Control</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -12,23 +12,31 @@
     <!-- https://github.com/gitbrent/bootstrap4-toggle -->
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
 	
-  </head>
+</head>
   
   <body>
     <div data-role="page" id="manual">
 	  
-		<nav class="navbar navbar-light" style="background-color: #e9e9e9;">
-			<button type="button" onclick="window.location.href='./R-index.htm';" class="btn btn-secondary">Back</button>
-			<a class="navbar-brand navbar-text" href="R-index.htm">Manual Control</a>
-			<a class="navbar-brand navbar-text" href="#"></a>
-		</nav>
+		<nav class="navbar navbar-expand-xl navbar-light " style="background-color: #e9e9e9;">
+            <button class="btn btn-secondary" type="button" onclick="window.location.href='./R-index.htm';" >Back</button>
+            <a class="navbar-brand navbar-text mx-auto" href="R-index.htm">Manual Control</a>
+            <div class="btn-group dropleft">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-cogs"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="./R-Settings.htm">Configuration</a>
+                    <a class="dropdown-item" href="./R-Advanced.htm">Advanced</a>
+                    <a class="dropdown-item" href="./R-Logs.htm">Logs</a>
+                </div>
+            </div>
+        </nav>
 		<!-- /header -->
 	  
-		<div class="container">
-		
+		<div data-role="container" class="container">
 			<div class="row mt-4">
 				<div class="col">
-					<div data-role="content" id="valves"></div>
+					<div id="valves"></div>
 				</div>
 			</div>
 		</div>
@@ -73,11 +81,10 @@
 
 		function addValve(j, name, state) {
 		  var zone_id = 'z' + String.fromCharCode(97+j);
-		  var new_ctl = $('<label for="' + zone_id + '">' + name + ':</label>' +
-			'<span class="valves" name="' + zone_id + '" id="' + zone_id + '" >' +
-			' <div class="checkbox">' +
-			'   <input type="checkbox" value="on"' + ((state == 'on') ? ' selected' : ' ') + ' data-toggle="toggle" data-role="slider" data-mini="true">' +
-			' </div> </span>');
+		  var new_ctl = $('<span class="valves" name="' + zone_id + '" id="' + zone_id + '" >' +
+			' <div class="checkbox"> <label for="' + zone_id + '">' + name + ' : ' +
+			' 	  <input id="' + zone_id + '" type="checkbox" data-toggle="toggle" value="on"' + ((state == 'on') ? ' selected' : ' ') + '>' +
+			' </label> </div> </span>' );
 		  new_ctl.appendTo('#valves');
 		}
 	</script>
@@ -88,5 +95,6 @@
 		   $('input[type="checkbox"]').not(this).prop('checked', false);
 		});
 	</script>
+  
   </body>
 </html>

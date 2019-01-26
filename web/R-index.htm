@@ -50,17 +50,17 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg4">
+                            <!-- <div class="col-lg4">
                                 <div id="upcoming" style="display:block">
                                     <h3>Upcoming Schedules:</h3>
                                     <ul></ul>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="col-lg-4">
 								<div class="checkbox">
-									<label for="systemz">Run Schedules
-										<input type="checkbox" name="systemz" id="systemz" data-toggle="toggle" data-on="Enabled" data-off="Disabled">
+									<label for="systemz">
+										<input type="checkbox" name="systemz" id="systemz" data-toggle="toggle" data-on="Enabled" data-off="Disabled"> Run Schedules
 									</label>
 								</div>
                             </div>
@@ -81,9 +81,11 @@
                 </div>
                 <div class="col">
                     <div class="card ">
-                        <div class="card-header" style="background-color: #25b852;">Controller Status</div>
+                        <div class="card-header" style="background-color: #25b852;">Upcoming Schedules</div>
                         <div class="card-body">
-
+							<div id="upcoming" style="display:block">
+								<ul></ul>
+							</div>
                         </div>
                     </div>
                 </div>
@@ -204,7 +206,6 @@
 					checkAnim(data);
 					getUpcomingSched();
 					showWeather();
-					
 				}
 			});
 		});

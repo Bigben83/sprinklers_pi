@@ -31,7 +31,9 @@
 			<div class="row">
 				<div class="col">
 					<div data-role="content">
+					<div class="card-columns mb-3" >
 					  <div id="zonectl"></div>
+					</div>
 					</div>
 				</div>
 			</div>
@@ -164,8 +166,7 @@
 
 			function addZoneCtl(j, name, enabled, pump) {
 			  var zone_id = String.fromCharCode(97+j);
-			  var new_ctl = $('<div class="col-md-4 col-sm-4 mt-4">' +
-				'<div class="card">' +
+			  var new_ctl = $('<div class="card mb-3">' +
 					'<div class="card-header"><div class="form-group row"><h3 class="font-weight-bold"><label class="col-sm-2 col-form-label"><i class="fas fa-tint text-primary"></i></label><div class="col-sm-10"><input class="form-control-plaintext" name="z' + zone_id + 'name" id="z' + zone_id + 'name" placeholder="" value="' + name + '" type="text" maxlength=19/></div></h3></div>' +
 					((enabled == 'on') ? '<h5>Zone ' : '<h5 style="font-style:italic;">Zone ') + j +
 					((enabled == 'on') ? '</h5>' : ' (Disabled)</h5>') + 
@@ -203,7 +204,6 @@
 						'<div class="col align-self-center text-center"><a class="edit-button on-card" data-toggle="modal" data-target="#exampleModal" ><span class="fa fa-edit"></span></a></div>' +
 						'<div class="col align-self-end text-right"><a class="info-button on-card"><span class="fa fa-info-circle"></span></a></div></div>' +
 					'</div>' +
-				'</div>' +
 				'</div>');
 			  new_ctl.appendTo('#zonectl');
 			}
