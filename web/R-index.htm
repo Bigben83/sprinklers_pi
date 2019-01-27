@@ -93,7 +93,8 @@
                     <div class="card ">
                         <div class="card-header" style="background-color: #37B8CF;">Observations</div>
                         <div class="card-body">
-                            <div id="wuText"></div>
+                            <b><div id="timedate"></div></b>
+							<div id="wuText"></div>
                         </div>
                     </div>
                 </div>
@@ -202,7 +203,8 @@
 					$('#schedules_lv').find('span').text(data.schedules);
 					var dt = new Date(data.timenow * 1000);
 					$('#version').text("V" + data.version);
-					$('#timediv').empty().append('' + pad(dt.getUTCHours(), 2) + ':' + pad(dt.getUTCMinutes(), 2) + ':' + pad(dt.getUTCSeconds(), 2) + ' ' + pad(dt.getUTCFullYear(), 4) + '/' + pad(dt.getUTCMonth() + 1, 2) + '/' + pad(dt.getUTCDate(), 2));
+					$('#timediv').empty().append('' + pad(dt.getUTCHours(), 2) + ':' + pad(dt.getUTCMinutes(), 2) + ' ' + pad(dt.getUTCDate(), 2) + '/' + pad(dt.getUTCMonth() + 1, 2) + '/' + pad(dt.getUTCFullYear(), 4));
+					$('#timedate').empty().append('' + pad(dt.getUTCHours(), 2) + ':' + pad(dt.getUTCMinutes(), 2) + ' ' + pad(dt.getUTCDate(), 2) + '/' + pad(dt.getUTCMonth() + 1, 2) + '/' + pad(dt.getUTCFullYear(), 4));
 					checkAnim(data);
 					getUpcomingSched();
 					showWeather();

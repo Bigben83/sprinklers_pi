@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	
+	<link href="https://file.myfontastic.com/GcmTQwKRXeQDK8qzNJF5fP/icons.css" rel="stylesheet">
 
     <!-- https://github.com/gitbrent/bootstrap4-toggle -->
     <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
@@ -26,7 +28,7 @@
 		</nav>
 		<!-- /header -->
 	  
-		<div class="container">
+		<div class="container mt-3">
 		<form id="zForm" action="#">
 			<div class="row">
 				<div class="col">
@@ -77,6 +79,7 @@
 				  <li class="nav-item"><a class="nav-link active" id="zone-tab" data-toggle="tab" href="#zone" role="tab" aria-controls="zone" aria-selected="true">Zone Detail</a></li>
 				  <li class="nav-item"><a class="nav-link" id="schedule-tab" data-toggle="tab" href="#schedule" role="tab" aria-controls="schedule" aria-selected="false">Schedule</a></li>
 				  <li class="nav-item"><a class="nav-link" id="advanced-tab" data-toggle="tab" href="#advanced" role="tab" aria-controls="advanced" aria-selected="false">Advanced</a></li>
+				  <li class="nav-item"><a class="nav-link" id="soak-tab" data-toggle="tab" href="#soak" role="tab" aria-controls="soak" aria-selected="false">Cycle &amp; Soak</a></li>
 				</ul>
 				
 				<div class="tab-content" id="myTabContent">
@@ -96,6 +99,7 @@
 					  <div class="form-group">
 						<label for="exampleInputPassword1">Zone Icon</label>
 						<small id="emailHelp" class="form-text text-muted">Choose the icon you want to see on the dashboard for this zone</small>
+						<i class="fas fa-tint fa-2x text-primary mr-3"></i><i class="fab fa-pagelines fa-2x text-success mr-3"></i><i class="fas fa-leaf fa-2x text-success mr-3"></i><i class="fas fa-carrot fa-2x text-warning mr-3"></i><span class="icon-grass fa-2x text-success mr-3"></span>
 					  </div>
 					  <div class="form-group">
 						<label for="exampleInputPassword1">Watering Type</label>
@@ -118,6 +122,60 @@
 				  <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
 				  </div>
 				  <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+				  </div>
+				  <div class="tab-pane fade" id="soak" role="tabpanel" aria-labelledby="soak-tab">
+						<div class="tab-panel">
+							<form>
+								<div class="form-group">
+									<div class="title">Cycle &amp; Soak</div>
+									<div class="sub-title"><span>Cycle and soak reduces runoff from each zone by pausing an irrigation cycle</span>
+										<div class="custom-popover-container m-l-5 theme-white">
+											
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="content  ">
+										<div class="form-check">
+											<input class="" id="radio-enable-cycle-soak" type="radio" value="0">
+											<label class="form-check-label" for="radio-enable-cycle-soak">Do not enable cycle and soak</label>
+										</div>
+										<div class="form-check">
+											<input class="" id="radio-disable-cycle-soak" type="radio" value="1">
+											<label class="form-check-label" for="radio-disable-cycle-soak">Enable cycle and soak</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-portion">
+										<div class="title">Cycle Time</div>
+										<div class="sub-title"><span>Enter the maximum time the zone can run for</span></div>
+										<div class="content  ">
+											<div class="input-group mb-3">
+												<input type="text" class="form-control" placeholder="Enter Cycle Time" min="0" value="5" aria-label="Enter Cycle Time" aria-describedby="basic-addon2">
+												<div class="input-group-append">
+													<span class="input-group-text" id="basic-addon2">minutes</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-portion">
+										<div class="title">Soak Time</div>
+										<div class="sub-title"><span>Enter the minimum time between zone waterings</span></div>
+										<div class="content  ">
+											<div class="input-group mb-3">
+												<input type="text" class="form-control" placeholder="Enter Soak Time" min="0" value="2" aria-label="Enter Soak Time" aria-describedby="basic-addon2">
+												<div class="input-group-append">
+													<span class="input-group-text" id="basic-addon2">minutes</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
 				  </div>
 				</div>
 				
@@ -167,36 +225,35 @@
 			function addZoneCtl(j, name, enabled, pump) {
 			  var zone_id = String.fromCharCode(97+j);
 			  var new_ctl = $('<div class="card mb-3">' +
-					'<div class="card-header"><div class="form-group row"><h3 class="font-weight-bold"><label class="col-sm-2 col-form-label"><i class="fas fa-tint text-primary"></i></label><div class="col-sm-10"><input class="form-control-plaintext" name="z' + zone_id + 'name" id="z' + zone_id + 'name" placeholder="" value="' + name + '" type="text" maxlength=19/></div></h3></div>' +
-					((enabled == 'on') ? '<h5>Zone ' : '<h5 style="font-style:italic;">Zone ') + j +
-					((enabled == 'on') ? '</h5>' : ' (Disabled)</h5>') + 
+					'<div class="card-header py-3 d-flex align-items-center"><i class="fas fa-tint fa-2x text-primary mr-3"></i><i class="fab fa-pagelines fa-2x text-success mr-3"></i><div><h5 class="card-title mb-0">' + j + '. ' + name + '</h5>' +
+					((enabled == 'on') ? '<h7 class="card-subtitle text-muted">Zone ' : '<h7 style="font-style:italic;">Zone ') + j +
+					((enabled == 'on') ? '</h7></div>' : ' (Disabled)</h7></div>') + 
 					'</div>' +
 					'<div class="card-body">' +
 					'<div class="form-check pl-0">' +
-						'<input data-toggle="toggle" data-onstyle="success" id="cb' + zone_id + 'e" name="z' + zone_id + 'e" type="checkbox" ' + ((enabled == 'on') ? 'checked="on"' : '') + '/>' +
-						'<label class="form-check-label" for="cb' + zone_id + 'e">Zone Enabled</label>' +
+						'<input data-toggle="toggle" data-size="mini" id="cb' + zone_id + 'e" name="z' + zone_id + 'e" type="checkbox" ' + ((enabled == 'on') ? 'checked="on"' : '') + '/>' +
+						'<label class="form-check-label" for="cb' + zone_id + 'e">&nbsp;Zone Enabled</label>' +
 					'</div>' +
 					'<div class="form-check pl-0">' +
-						'<input data-toggle="toggle" data-onstyle="success" id="cb' + zone_id + 'p" name="z' + zone_id + 'p" type="checkbox" ' + ((pump == 'on') ? 'checked="on"' : '') + '/>' +
-						'<label class="form-check-label" for="cb' + zone_id + 'p">Pump</label>' +            
+						'<input data-toggle="toggle" data-size="mini" data-onstyle="success" id="cb' + zone_id + 'p" name="z' + zone_id + 'p" type="checkbox" ' + ((pump == 'on') ? 'checked="on"' : '') + '/>' +
+						'<label class="form-check-label" for="cb' + zone_id + 'p">&nbsp;Pump</label>' +            
 					'</div>' +
-						'<div>' +
+						'<hr class="my-2"><div>' +
 							'<h4 class="card-subtitle mb-2 text-muted">Watering Type</h4>' +
 							'<p class="card-text">Time Based</p>' +
-						'</div><br>' +
-						'<div>' +
+						'</div>' +
+						'<hr class="my-2"><div>' +
 							'<h4 class="card-subtitle mb-2 text-muted">Run Length</h4>' +
 							'<p class="card-text">18min</p>' +
-						'</div><br>' +
-						'<div>' +
+						'</div>' +
+						'<hr class="my-2"><div>' +
 							'<h4 class="card-subtitle mb-2 text-muted">Frequency</h4>' +
 							'<p class="card-text">Every Program Start Time</p>' +
-						'</div><br>' +
-						'<div>' +
+						'</div>' +
+						'<hr class="my-2"><div>' +
 							'<h4 class="card-subtitle mb-2 text-muted">Cycle & Soak</h4>' +
-							'<div class="checkbox"><label>' +
-								'<input id="cs" name="cs" type="checkbox" />' +        
-							'Enabled</label></div>' +
+							'<input data-toggle="toggle" data-size="mini" id="cs" name="cs" type="checkbox" />' +        
+							'<label class="form-check-label" for="cs">&nbsp;Enabled</label>' +
 						'</div>' +
 					'</div>' +
 					'<div class="card-footer">' +
@@ -206,6 +263,7 @@
 					'</div>' +
 				'</div>');
 			  new_ctl.appendTo('#zonectl');
+			  $('input:checkbox').bootstrapToggle();
 			}
 
 			function zoneSubmitForm() {
