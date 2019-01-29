@@ -65,7 +65,7 @@
 		
 		<!-- **************************************************************************** -->
 		<!-- Modal -->
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal fade" id="zoneEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 			<div class="modal-content">
 			  <div class="modal-header">
@@ -317,6 +317,30 @@
 		<!-- /Modal -->
 		<!-- **************************************************************************** -->
 		
+		<!-- **************************************************************************** -->
+		<!-- Information Modal -->
+		<div class="modal fade" id="zoneInformation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Zone Information</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div id="zoneInfo"></div>
+					</div>
+					
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>	
+		</div>
+		<!-- **************************************************************************** -->
+		
+		
 		</div><!-- /container -->
 				
 
@@ -340,14 +364,15 @@
 			$('#zones').ready(function () {
 			  $.getJSON("json/zones", function (data) {
 				for (var i = 0; i < data.zones.length; i++) {
-				  addZoneCtl(i + 1, data.zones[i].name, data.zones[i].enabled, data.zones[i].pump);
+				  addZoneCtl(i + 1, data.zones[i].name, data.zones[i].enabled, data.zones[i].pump, data.zones[i].state);
+				  zoneInformation(i + 1, data.zones[i].name, data.zones[i].enabled, data.zones[i].pump, data.zones[i].state);
 				}
 				$('#zonectl').trigger('create');
 				//$('#zonectl').collapsibleset('refresh');
 			  });
 			});
 
-			function addZoneCtl(j, name, enabled, pump) {
+			function addZoneCtl(j, name, enabled, pump, state) {
 			  var zone_id = String.fromCharCode(97+j);
 			  var new_ctl = $('<div class="card mb-3">' +
 					'<div class="card-header py-3 d-flex align-items-center"><i class="fas fa-tint fa-2x text-primary mr-3"></i><i class="fab fa-pagelines fa-2x text-success mr-3"></i>' +
@@ -391,13 +416,13 @@
 					'<div class="card-footer">' +
 						'<div class="row">' +
 							'<div class="col align-self-start text-danger">' +
-								'<a class="delete-button on-card" id="cb' + zone_id + 'p" name="z' + zone_id + 'e" ><span class="fa fa-trash"></span></a>' +
+								'<a class="delete-button on-card" name="z' + zone_id + 'name" id="z' + zone_id + 'name" ><span class="fa fa-trash"></span></a>' +
 							'</div>' +
 							'<div class="col align-self-center text-center">' +
-								'<a class="edit-button on-card" data-toggle="modal" id="cb' + zone_id + 'p" name="z' + zone_id + 'e" data-target="#exampleModal" ><span class="fa fa-edit"></span></a>' +
+								'<a class="edit-button on-card" data-toggle="modal" name="z' + zone_id + 'name" id="z' + zone_id + 'name" data-target="#zoneEdit" ><span class="fa fa-edit"></span></a>' +
 							'</div>' +
 							'<div class="col align-self-end text-right">' +
-								'<a class="info-button on-card"><span class="fa fa-info-circle"></span></a>' +
+								'<a class="info-button on-card" data-toggle="modal" name="z' + zone_id + 'name" id="z' + zone_id + 'name" data-target="#zoneInformation" ><span class="fa fa-info-circle"></span></a>' +
 							'</div>' +
 						'</div>' +
 					'</div>' +
@@ -406,6 +431,49 @@
 			  $('input:checkbox').bootstrapToggle();
 			}
 
+			function zoneInformation(j, name, enabled, pump, state) {
+				var zone_id = $(this).attr('id');
+				var new_ctl = $('<div>' +
+					'<div class="zone-card-header">' +
+						'<span class="icon-grass fa-2x text-success mr-3">' +
+						'<div class="info-container">' +
+							'<div class="title">' + name + '</div>' +
+							'<div class="sub-title">Zone ' + zone_id + '</div>' +
+						'</div>' +
+					'</div>' +
+					'<div class="field-with-icon m-l-5 m-t-10">' +
+						'<div class="icon-container left"><i class="fa fa-tag"></i></div>' +
+						'<div class="info-container right">' +
+							'<div class="inner-title"><span class="space">Watering Type</span></div>' +
+							'<div class="inner-content"><span>Time Based</span></div>' +
+						'</div>' +
+					'</div>' +
+					'<div class="field-with-icon m-l-5 m-t-10">' +
+						'<div class="icon-container left"><i class="fa fa-bell"></i></div>' +
+						'<div class="info-container right">' +
+							'<div class="inner-title"><span class="space">Next Watering Cycle</span></div>' +
+							'<div class="inner-content"><span>Not scheduled to run</span></div>' +
+						'</div>' +
+					'</div>' +
+					'<div class="field-with-icon m-l-5 m-t-10">' +
+						'<div class="icon-container left"><i class="fa fa-tasks"></i></div>' +
+						'<div class="info-container right">' +
+							'<div class="inner-title"><span class="space">Watering Frequency</span></div>' +
+							'<div class="inner-content"><span>Every Program Start Time unless modified by your Watering Triggers</span></div>' +
+						'</div>' +
+					'</div>' +
+					'<div class="field-with-icon m-l-5 m-t-10">' +
+						'<div class="icon-container left"><i class="fa fa-clock-o"></i></div>' +
+						'<div class="info-container right">' +
+							'<div class="inner-title"><span class="space">Watering Length</span></div>' +
+							'<div class="inner-content"><span>18 mins</span></div>' +
+						'</div>' +
+					'</div>' +
+				'</div>');
+				new_ctl.appendTo('#zoneInfo');
+				$('input:checkbox').bootstrapToggle();
+			}  
+			  
 			function zoneSubmitForm() {
 			  $.ajax({
 				data: $('#zForm').serialize(),
