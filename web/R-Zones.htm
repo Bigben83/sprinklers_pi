@@ -19,7 +19,7 @@
   <body>
     <div data-role="page" id="zones">
       
-
+		<form id="zForm" action="#">
 		<nav class="navbar navbar-light" style="background-color: #e9e9e9;">
 			<button type="button" onclick="window.location.href='./R-index.htm';" class="btn btn-secondary">Back</button>
 			<a class="navbar-brand navbar-text" href="R-index.htm">Watering Zones</a>
@@ -29,7 +29,7 @@
 		<!-- /header -->
 	  
 		<div class="container mt-3">
-		<form id="zForm" action="#">
+
 			<div class="row">
 				<div class="col">
 					<div data-role="content">
@@ -63,6 +63,7 @@
 			</div>
 		</div>
 		
+		<!-- **************************************************************************** -->
 		<!-- Modal -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
@@ -83,47 +84,164 @@
 				</ul>
 				
 				<div class="tab-content" id="myTabContent">
-				  <div class="tab-pane fade show active" id="zone" role="tabpanel" aria-labelledby="zone-tab">
 					
-					<form>
-					  <div class="form-group">
-						<label for="exampleInputEmail1">Zone Name</label>
-						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-						<small id="emailHelp" class="form-text text-muted">Assign a name for this irrigation zone</small>
-					  </div>
-					  <div class="form-group">
-						<label for="exampleInputPassword1">Zone Number</label>
-						<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-						<small id="emailHelp" class="form-text text-muted">Choose the zone number that this zone is wired to on your Hunter controller</small>
-					  </div>
-					  <div class="form-group">
-						<label for="exampleInputPassword1">Zone Icon</label>
-						<small id="emailHelp" class="form-text text-muted">Choose the icon you want to see on the dashboard for this zone</small>
-						<i class="fas fa-tint fa-2x text-primary mr-3"></i><i class="fab fa-pagelines fa-2x text-success mr-3"></i><i class="fas fa-leaf fa-2x text-success mr-3"></i><i class="fas fa-carrot fa-2x text-warning mr-3"></i><span class="icon-grass fa-2x text-success mr-3"></span>
-					  </div>
-					  <div class="form-group">
-						<label for="exampleInputPassword1">Watering Type</label>
-					  </div>
-					  <div class="form-group">
-							<div class="form-check form-check-inline">
-							  <input class="form-check-input" type="radio" id="inlineCheckbox1" value="option1">
-							  <label class="form-check-label" for="inlineCheckbox1">Time Based Schedule</label>
-							</div>
-							<div class="form-check form-check-inline">
-							  <input class="form-check-input" type="radio" id="inlineCheckbox2" value="option2">
-							  <label class="form-check-label" for="inlineCheckbox2">None</label>
-							</div>
-						<small id="emailHelp" class="form-text text-muted">Water at a specified frequency (eg. every 1 week) and adjust schedule based on temperature and rainfall</small>
-					  </div>
-
-					</form>
+					<!-- ZONE TAB START -->
+					<div class="tab-pane fade show active" id="zone" role="tabpanel" aria-labelledby="zone-tab">
+						<form>
+						  <div class="form-group">
+							<label for="CurrentZoneName">Zone Name</label>
+							<input type="email" class="form-control" id="CurrentZoneName" aria-describedby="emailHelp">
+							<small id="CurrentZoneNameHelp" class="form-text text-muted">Assign a name for this irrigation zone</small>
+						  </div>
+						  <div class="form-group">
+							<label for="CurrentZoneNumber">Zone Number</label>
+							<input type="email" class="form-control" id="CurrentZoneNumber" aria-describedby="emailHelp">
+							<small id="CurrentZoneNumberHelp" class="form-text text-muted">Choose the zone number that this zone is wired to on your Hunter controller</small>
+						  </div>
+						  <div class="form-group">
+							<label for="CurrentZoneIcon">Zone Icon</label>
+							<small id="emailHelp" class="form-text text-muted">Choose the icon you want to see on the dashboard for this zone</small>
+							<i class="fas fa-tint fa-2x text-primary mr-3"></i><i class="fab fa-pagelines fa-2x text-success mr-3"></i><i class="fas fa-leaf fa-2x text-success mr-3"></i><i class="fas fa-carrot fa-2x text-warning mr-3"></i><span class="icon-grass fa-2x text-success mr-3"></span>
+						  </div>
+						  <div class="form-group">
+							<label for="exampleInputPassword1">Watering Type</label>
+						  </div>
+						  <div class="form-group">
+								<div class="form-check">
+								  <input type="radio" name="wateringTime" class="form-check-input"  id="Timebased" value="option1">
+								  <label class="form-check-label" for="Timebased">Time Based Schedule</label>
+								</div>
+								<div class="form-check">
+								  <input type="radio" name="wateringTime" class="form-check-input"  id="TimebasedNone" value="option2">
+								  <label class="form-check-label" for="TimebasedNone">None</label>
+								</div>
+							<small id="emailHelp" class="form-text text-muted">Water at a specified frequency (eg. every 1 week) and adjust schedule based on temperature and rainfall</small>
+						  </div>
+						</form>
+					</div>
+				
+					<!-- SCHEDULE TAB START -->
+					<div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
+						<div class="tab-panel">
+							<form class="was-validated">
+								<div class="content">
+									<h6>Watering Type</h6>
+									<div class="text-muted sub-title"><span></span></div>
+									<div class="form-group">
+										<div class="form-check">
+											<input type="radio" name="wateringType" class="form-check-input" id="radio-enter-time" value="1">
+											<label class="form-check-label" for="radio-enter-time">Enter Time and Frequency below</label>
+										</div>
+										<div class="form-check">
+											<input type="radio" name="wateringType" class="form-check-input" id="radio-use-preconfigured" value="0">
+											<label class="form-check-label" for="radio-use-preconfigured">Use a Preconfigured Watering Schedule</label>
+										</div>
+									</div>
+								</div>
+								
+								<div class="content">
+									<h6>Watering Length</h6>
+									<div class="text-muted sub-title"><span>The number of minutes this zone will run for each time</span></div>
+									<div class="form-group">
+										<div class="input-group mb-3">
+											<input type="number" class="form-control" placeholder="Enter Watering Length" min="0" value="18" aria-label="Enter Cycle Time" aria-describedby="basic-addon2">
+											<div class="input-group-append">
+												<span class="input-group-text" id="basic-addon2">minutes</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="content">
+									<h6>Watering Frequency</h6>
+									<div class="text-muted sub-title"><span>Choose how often this zone should run</span></div>
+									<div class="form-group">
+										<div class="form-check">
+											<input type="radio" name="wateringFreq" class="form-check-input" id="radio-time-based-zone-category-1" value="1">
+											<label class="form-check-label" for="radio-time-based-zone-category-1">Every Program Start Time</label>
+										</div>
+										<div class="form-check">
+											<input type="radio" name="wateringFreq" class="form-check-input" id="radio-time-based-zone-category-0" value="0">
+											<label class="form-check-label" for="radio-time-based-zone-category-0">Interval Based Watering</label>
+										</div>
+									</div>
+								</div>
+								
+								<div class="content">
+									<h6>Adaptave Watering</h6>
+									<div class="text-muted sub-title"><span>Adjust watering based on the following triggers</span></div>
+									
+									<div class="watering-trigger-options">
+										<div class="form-group">
+											<div style="form-check">
+												<div class="group-title"><i class="fa fa-power-off m-r-5"></i>Don't water when:</div>
+											</div>
+											<div style="form-check">
+												<input id="wtoption-5" type="checkbox" data-toggle="toggle" data-size="xs" >
+												<label for="wtoption-5" class="checkbox-inline ">Forecast below 8°C</label>
+											</div>
+											<div style="form-check">
+												<input id="wtoption-9" type="checkbox" data-toggle="toggle" data-size="xs" >
+												<label for="wtoption-9" class="checkbox-inline ">80%+ chance of rain</label>
+											</div>
+											<div style="form-check">
+												<input id="wtoption-11" type="checkbox" data-toggle="toggle" data-size="xs" >
+												<label for="wtoption-11" class="checkbox-inline ">3mm+ rainfall last day</label>
+											</div>
+											<div style="form-check">
+												<input id="wtoption-12" type="checkbox" data-toggle="toggle" data-size="xs" >
+												<label for="wtoption-12" class="checkbox-inline ">10mm+ rainfall last 7 days</label>
+											</div>
+										</div>
+										
+										<div class="form-group">
+											<div style="form-check">
+												<div class="group-title"><i class="fa fa-magic m-r-5"></i>Adjust watering:</div>
+											</div>
+											<div style="form-check">
+												<input id="wtoption-8" type="checkbox" data-toggle="toggle" data-size="xs" >
+												<label for="wtoption-8" class="checkbox-inline">Water longer when hot</label>
+											</div>
+											<div style="form-check">	
+												<input id="wtoption-7" type="checkbox" data-toggle="toggle" data-size="xs" >
+												<label for="wtoption-7" class="checkbox-inline">Water more often when hot</label>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+							</form>
+						</div>
+					</div>
 					
-				  </div>
-				  <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
-				  </div>
-				  <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
-				  </div>
-				  <div class="tab-pane fade" id="soak" role="tabpanel" aria-labelledby="soak-tab">
+					<!-- ADVANCED TAB START -->
+					<div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+						<div>
+							<div class="tab-panel">
+								<form>
+									<div class="form-portion">
+										<div class="title">Water Adjustment</div>
+										<div class="sub-title"><span>Fine tune your watering if your zone appears to be too dry or wet</span></div>
+										<div class="content  watering-adjustment">
+											<div class="form-group">
+												<div class="slider-with-tooltip m-t-16">
+													<input type="range" class="form-control-range" min="0" max="200" step="5" value="100">
+													<div class="tooltip right">
+														<div class="tooltip-arrow"></div>
+														<div class="tooltip-inner">Water for normal watering length</div>
+													</div>
+												</div>
+												<div class="range-unit text-center"><span class="pull-left">Water less</span><span>Normal</span><span class="pull-right">Water more</span></div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+					
+					<!-- SOAK TAB START -->
+					<div class="tab-pane fade" id="soak" role="tabpanel" aria-labelledby="soak-tab">
 						<div class="tab-panel">
 							<form>
 								<div class="form-group">
@@ -143,6 +261,10 @@
 										<div class="form-check">
 											<input class="" id="radio-disable-cycle-soak" type="radio" value="1">
 											<label class="form-check-label" for="radio-disable-cycle-soak">Enable cycle and soak</label>
+										</div>
+										<div class="form-check">
+										<input data-toggle="toggle" data-size="mini" id="cycle-soak-on" name="ze" type="checkbox" checked="on" />
+										<label class="form-check-label" for="cycle-soak-on">Enable cycle and soak</label>
 										</div>
 									</div>
 								</div>
@@ -176,7 +298,7 @@
 								</div>
 							</form>
 						</div>
-				  </div>
+					</div>
 				</div>
 				
 			  </div>
@@ -191,6 +313,7 @@
 		  </div>
 		</div>
 		<!-- /Modal -->
+		<!-- **************************************************************************** -->
 		
 		</div><!-- /container -->
 				
@@ -225,7 +348,8 @@
 			function addZoneCtl(j, name, enabled, pump) {
 			  var zone_id = String.fromCharCode(97+j);
 			  var new_ctl = $('<div class="card mb-3">' +
-					'<div class="card-header py-3 d-flex align-items-center"><i class="fas fa-tint fa-2x text-primary mr-3"></i><i class="fab fa-pagelines fa-2x text-success mr-3"></i><div><h5 class="card-title mb-0">' + j + '. ' + name + '</h5>' +
+					'<div class="card-header py-3 d-flex align-items-center"><i class="fas fa-tint fa-2x text-primary mr-3"></i><i class="fab fa-pagelines fa-2x text-success mr-3"></i>' +
+					'<div class="form-group"><h5 class="card-title mb-0"><label for="z' + zone_id + 'name" class="col-form-label">' + j + '. </label><input type="text" class="form-control-plaintext" name="z' + zone_id + 'name" id="z' + zone_id + 'name" placeholder="" value="' + name + '" maxlength=19/></h5>' +
 					((enabled == 'on') ? '<h7 class="card-subtitle text-muted">Zone ' : '<h7 style="font-style:italic;">Zone ') + j +
 					((enabled == 'on') ? '</h7></div>' : ' (Disabled)</h7></div>') + 
 					'</div>' +
