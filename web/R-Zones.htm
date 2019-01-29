@@ -254,6 +254,7 @@
 								</div>
 								<div class="form-group">
 									<div class="content  ">
+										<!--
 										<div class="form-check">
 											<input class="" id="radio-enable-cycle-soak" type="radio" value="0">
 											<label class="form-check-label" for="radio-enable-cycle-soak">Do not enable cycle and soak</label>
@@ -262,8 +263,9 @@
 											<input class="" id="radio-disable-cycle-soak" type="radio" value="1">
 											<label class="form-check-label" for="radio-disable-cycle-soak">Enable cycle and soak</label>
 										</div>
+										-->
 										<div class="form-check">
-										<input data-toggle="toggle" data-size="mini" id="cycle-soak-on" name="ze" type="checkbox" checked="on" />
+										<input data-toggle="toggle" data-size="mini" id="cycle-soak-on" name="ze" type="checkbox" />
 										<label class="form-check-label" for="cycle-soak-on">Enable cycle and soak</label>
 										</div>
 									</div>
@@ -349,8 +351,14 @@
 			  var zone_id = String.fromCharCode(97+j);
 			  var new_ctl = $('<div class="card mb-3">' +
 					'<div class="card-header py-3 d-flex align-items-center"><i class="fas fa-tint fa-2x text-primary mr-3"></i><i class="fab fa-pagelines fa-2x text-success mr-3"></i>' +
-					'<div class="form-group"><h5 class="card-title mb-0"><label for="z' + zone_id + 'name" class="col-form-label">' + j + '. </label><input type="text" class="form-control-plaintext" name="z' + zone_id + 'name" id="z' + zone_id + 'name" placeholder="" value="' + name + '" maxlength=19/></h5>' +
-					((enabled == 'on') ? '<h7 class="card-subtitle text-muted">Zone ' : '<h7 style="font-style:italic;">Zone ') + j +
+						'<div class="form-group">' +
+						'<h6 class="card-title mb-0">' +
+							'<div class="form-inline">' +
+								'<label for="z' + zone_id + 'name" class="col-form-label">' + j + '. </label>' +
+								'<input type="text" readonly class="form-control form-control-plaintext bg-light" name="z' + zone_id + 'name" id="z' + zone_id + 'name" placeholder="" value="' + name + '" maxlength=19/>' +
+							'</div>' +
+						'</h6>' +
+						((enabled == 'on') ? '<h7 class="card-subtitle text-muted">Zone ' : '<h7 style="font-style:italic;">Zone ') + j +
 					((enabled == 'on') ? '</h7></div>' : ' (Disabled)</h7></div>') + 
 					'</div>' +
 					'<div class="card-body">' +
@@ -381,9 +389,17 @@
 						'</div>' +
 					'</div>' +
 					'<div class="card-footer">' +
-						'<div class="row"><div class="col align-self-start text-danger"><a class="delete-button on-card"><span class="fa fa-trash"></span></a></div>' +
-						'<div class="col align-self-center text-center"><a class="edit-button on-card" data-toggle="modal" data-target="#exampleModal" ><span class="fa fa-edit"></span></a></div>' +
-						'<div class="col align-self-end text-right"><a class="info-button on-card"><span class="fa fa-info-circle"></span></a></div></div>' +
+						'<div class="row">' +
+							'<div class="col align-self-start text-danger">' +
+								'<a class="delete-button on-card" id="cb' + zone_id + 'p" name="z' + zone_id + 'e" ><span class="fa fa-trash"></span></a>' +
+							'</div>' +
+							'<div class="col align-self-center text-center">' +
+								'<a class="edit-button on-card" data-toggle="modal" id="cb' + zone_id + 'p" name="z' + zone_id + 'e" data-target="#exampleModal" ><span class="fa fa-edit"></span></a>' +
+							'</div>' +
+							'<div class="col align-self-end text-right">' +
+								'<a class="info-button on-card"><span class="fa fa-info-circle"></span></a>' +
+							'</div>' +
+						'</div>' +
 					'</div>' +
 				'</div>');
 			  new_ctl.appendTo('#zonectl');
